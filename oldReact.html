@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    .root {
+      width: 100vw;
+    }
+    .root #box {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <div id="box"></div>
+  </div>
+  <script src='./js/mainThread.js'></script>
+  <script type='text/javascript'>
+    const obj = {
+      tagName: 'div',
+      innerHTML: 'hello worldhello worldhello worldhello worldhello worldhello world'
+    }
+    const arr =[]
+    let num = 1
+    while(num < 50000) {
+      arr.push({...obj})
+      num++
+      if (num === 4999) {
+        console.log(num)
+      }
+    }
+    // 浏览器渲染小红块移动 当作主进程 便于观察主进程有没有被卡住
+    simulateMainThread()
+
+    setInterval(() => {
+      arr.forEach(item => {
+        const el = document.createElement(item.tagName)
+        el.innerHTML = item.innerHTML
+        el.style.textAlign = "right"
+        document.body.appendChild(el)
+      })
+    }, 2000)
+  </script>
+</body>
+</html>
